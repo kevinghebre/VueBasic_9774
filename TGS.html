@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="vue.js"></script>
+    <title>Tugas VueJS 9774</title>
+</head>
+
+<body>
+    <div id="app">
+        <div class="container">
+            <h1>Task</h1>
+            <form @submit="newTask" onsubmit="return false">
+                <div class="d-flex">
+                    <div class="form-group col-sm-8">
+                        <label for="name">Task Title</label>
+                        <input type="text" class="form-control" id="name" placeholder="Input Task Title here..."
+                            v-model="task.name" required>
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label for="priority">Priority</label>
+                        <select class="form-control" id="priority" v-model="task.priority" required>
+                            <option value="Penting">Penting</option>
+                            <option value="Biasa">Biasa</option>
+                            <option value="Tidak penting">Tidak penting</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12">
+                    <label for="notes"> Task Description </label>
+                    <textarea class="form-control" rows="3" id="notes" placeholder="Input Task Description here..."
+                        v-model="task.notes" required></textarea>
+                </div>
+                <div class="form-group" style="text-align: right;">
+                    <button name="resetTask" class="btn btn-warning" @click="resetTask"> <i class="fa fa-trash"></i>
+                        Reset</button>
+                    <button name="newTask" class="btn btn-success" type="submit"> <i class="fa fa-plus"></i>
+                        Tambah</button>
+                </div>
+            </form>
+            <div v-for="(task, index) in tasks" :key="index">
+                <div class="task-list">
+                    <button @click="deleteTask(index)" class="btn btn-delete btn-danger"
+                        style="vertical-align: middle; float: right;"> <i class="fa fa-times"> </i>
+                    </button>
+                    <div class="d-flex">
+                        <div>
+                            <h4>{{ task.name }}</h4>
+                            <h5>{{ task.notes }}</h5>
+                        </div>
+                        <div class="priority badge btn">
+                            <span v-if="task.priority == 'Penting'">
+                                <div class="penting">{{ task.priority }}</div>
+                            </span>
+                            <span v-if="task.priority == 'Tidak penting'">
+                                <div class="tidak-penting">{{ task.priority }}</div>
+                            </span>
+                            <span v-if="task.priority == 'Biasa'">
+                                <div class="biasa">{{ task.priority }}</div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <p>{{ author.name }} | {{ author.NPM }} | {{ author.kelas }}</p>
+        </div>
+    </div>
+
+</body>
+
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            author: {
+                name: "Kevin Ghebre Virians",
+                NPM: "180709774",
+                kelas: "PAW Kelas A",
+            },
+            task: {
+                name: '',
+                priority: '',
+                notes: '',
+            },
+            tasks: [
+                {
+                    name: 'NUGAS',
+                    priority: 'Tidak penting',
+                    notes: 'Capek',
+                },
+                {
+                    name: 'Grinding',
+                    priority: 'Penting',
+                    notes: 'Top Player',
+                },
+                {
+                    name: 'Tidur Awal',
+                    priority: 'Biasa',
+                    notes: 'Tidur awal kunci kesuksesan',
+                },
+            ],
+        },
+        methods: {
+            newTask() {
+                this.tasks.push({ name: this.task.name, priority: this.task.priority, notes: this.task.notes });
+                this.resetTask();
+            },
+            resetTask() {
+                this.task.name = '';
+                this.task.priority = '';
+                this.task.notes = '';
+            },
+            deleteTask(index) {
+                this.tasks.splice(index, 1);
+            }
+        },
+    });
+</script>
+
+<style>
+    body {
+        width: auto;
+        height: auto;
+        background-color: #abc;
+    }
+
+    .container {
+        width: 60%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 6vh;
+        margin-bottom: 6vh;
+        padding: 40px 60px;
+        background-color: white;
+    }
+
+    .task-list {
+        padding: 5px 20px;
+        padding-left: -20px;
+        border: 1px solid grey;
+        box-shadow: inset;
+        margin-bottom: 2px;
+    }
+
+    .task-list:hover {
+        background-color: rgba(170, 187, 204, 0.5);
+    }
+
+    .priority {
+        width: fit-content;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .penting {
+        padding: 5px;
+        margin-left: 4px;
+        margin-right: 4px;
+        background-color: rgba(255, 0, 0, 0.8);
+        color: white;
+        border-radius: 3px;
+    }
+
+    .biasa {
+        padding: 5px;
+        margin-left: 4px;
+        margin-right: 4px;
+        background-color: rgba(0, 0, 255, 0.8);
+        color: white;
+        border-radius: 3px;
+    }
+
+    .tidak-penting {
+        padding: 5px;
+        margin-left: 4px;
+        margin-right: 4px;
+        background-color: rgba(0, 128, 0, 0.8);
+        color: white;
+        border-radius: 3px;
+    }
+
+    .btn-delete {
+        padding: 20px;
+        margin-right: -15px;
+    }
+
+    h1,
+    button {
+        font-family: 'Nunito', sans-serif;
+    }
+
+    .footer {
+        display: inline-block;
+        background-color: rgb(7, 33, 59);
+        color: white;
+        width: 100%;
+    }
+
+    .footer p {
+        font-size: 14px;
+        text-align: center;
+        padding-top: 10px;
+    }
+</style>
+
+</html>
